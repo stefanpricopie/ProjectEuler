@@ -34,4 +34,7 @@ def get_prime(n):
                 primes += 1
         return p
 
-get_prime(3)
+t = int(input().strip())
+for a0 in range(t):
+    n = int(input().strip())
+    print(get_prime(n))
