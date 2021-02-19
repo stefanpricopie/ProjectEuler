@@ -29,13 +29,13 @@ def SieveOfEratosthenes(n):
     # return prime vector
     return prime 
   
-# driver program 
+# driver program
 t = int(input().strip())
 n_list = []
 for a0 in range(t):
     n = int(input().strip())
     n_list.append(n)
-    n_max = max(n_list)
+n_max = max(n_list)
 
 prime = SieveOfEratosthenes(n_max)
 prime_or_zero = [i if p else 0 for i,p in enumerate(prime)]
