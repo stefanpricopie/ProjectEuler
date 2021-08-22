@@ -24,8 +24,7 @@ def max_product(n_list,k):
 
 t = int(input().strip())
 for a0 in range(t):
-    n,k = input().strip().split(' ')
+    n,k = [int(i) for i in input().strip().split(' ')]
     num = input().strip()
-    k = int(k)
     n_list = [int(char) for char in num]
     print(max_product(n_list,k))
