@@ -19,17 +19,23 @@ def sum_div(nr):
 
 # skip i=1
 for i in range(2,n_max):
-    if d_n[i] == 0:
-        d_n[i] = sum_div(i)
-    # compute d_n of pair if does not exist
-    if d_n[i]<n_max and d_n[i]!=i:
-        if d_n[d_n[i]] == 0:
-            d_n[d_n[i]] = sum_div(d_n[i])
-        # check if amicable
-        if d_n[d_n[i]] == i:
-            amicable[max(i,d_n[i])+1] = i + d_n[i]
     # cumulative sum
-    amicable[i+1] += amicable[i]
+    amicable[i+1] = amicable[i]
+    d_n[i] = sum_div(i)
+    # Ignore cases such as d(6)=6
+    if d_n[i] == i:
+        continue
+    if d_n[i]>=n_max:
+        # compute corresponding pair
+        d_i = sum_div(d_n[i])
+    elif d_n[d_n[i]] == 0:
+        # compute and save correponding pair
+        d_n[d_n[i]] = sum_div(d_n[i])
+        d_i = d_n[d_n[i]]
+    else:
+        d_i = d_n[d_n[i]]
+    if d_i == i:
+        amicable[i+1] += i
 
 for n in n_list:
     print(amicable[n])
