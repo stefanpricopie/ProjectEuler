@@ -35,6 +35,7 @@ def fast_sum_of_proper_divisors(nr):
     input n, a list of primes, and a list of booleans
     returns the sum of the proper divisors
     """
+    Sieve(nr)
     if is_prime[nr]:
         return 1
     nr_copy = nr
@@ -65,19 +66,17 @@ for i in range(2,n_max):
     if d_n[i] < i:
         if d_n[d_n[i]] == i:
             amicable[i+1] += i
-    else:
-        Sieve(d_n[i])
-        if d_n[i] < n_max:
-            # calculate sum of divisors if it has not been calculated yet
-            if d_n[d_n[i]] == 0:
-                d_n[d_n[i]] = fast_sum_of_proper_divisors(d_n[i])
-            if d_n[d_n[i]] == i:
-                amicable[i+1] += i
-        elif d_n[i] < n_max*2:
-            # calculate sum of divisors if pair is out of range
-            inverse = fast_sum_of_proper_divisors(d_n[i]) 
-            if inverse == i:
-                amicable[i+1] += i
+    elif d_n[i] < n_max:
+        # calculate sum of divisors if it has not been calculated yet
+        if d_n[d_n[i]] == 0:
+            d_n[d_n[i]] = fast_sum_of_proper_divisors(d_n[i])
+        if d_n[d_n[i]] == i:
+            amicable[i+1] += i
+    elif d_n[i] < n_max*2:
+        # calculate sum of divisors if pair is out of range
+        inverse = fast_sum_of_proper_divisors(d_n[i]) 
+        if inverse == i:
+            amicable[i+1] += i
 
 for n in n_list:
     print(amicable[n])
