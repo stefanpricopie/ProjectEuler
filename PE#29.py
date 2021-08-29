@@ -1,61 +1,43 @@
 n = int(input())
-nr = 0
-powers = [(i,1) for i in range(n+1)]
-# from 0 to n_max (inclusive)
-is_prime = [False]*2+[True]*(n-1)
 
-def count_power(a,b,n=n):
-    if a<b:
-        if is_prime[b]:
+def coprimes(a_list):   # returns list such that there are no a,b with a%b == 0
+    i = 0
+    while i < len(a_list)-1:
+        j = i+1
+        while j < len(a_list):
+            if a_list[j] % a_list[i] == 0:
+                del a_list[j]
+            j +=1
+        i += 1
+    return a_list
+
+def is_multiple(nr,divisors):
+    for div in divisors:
+        if nr % div == 0 and nr != div:
             return True
-        # find a<c,d<b
-        root, power = powers[a]
-        power_root = b*power  # power of the root
+    return False
 
-        c = a*root
+def count_powersofroot(max_power, n = n):
+    nr = 0
+    power = 1
+    while power < max_power:
+        root_powers = [power*i for i in range(2,n+1)]
+        divisors = coprimes(list(range(power+1,max_power+1)))
+        # remove powers that can be expressed by a higher power of the root
+        count_powers = len([root for root in root_powers if not is_multiple(root,divisors)])
+        nr += count_powers
         power += 1
-        while c <= n:
-            if power_root % power == 0:
-                d = power_root//power
-                if max(c,d) < max(a,b):
-                    return False
-                else:
-                    return True
-            c *= root
-            power += 1
-        return True
+    # count all root powers of maximum root
+    nr += n-1
+    return nr
 
-    if a>b:
-        # find c<a,b<d
-        root, power = powers[a]
-        if power == 1:
-            # if root of a is a (i.e. power = 1)
-            return True
-        power_root = b*power  # power of the root
-        
-        c = a//root
-        power -= 1
-        while power_root//power <= n:
-            if power_root % power == 0:
-                d = power_root//power
-                if max(c,d) <= max(a,b):
-                    return False
-                else:
-                    return True
-            c //= root
-            power -= 1
-            if power == 0:
-                break
-        return True
+nr = 0
+# from 0 to n
+powers = [(i,1) for i in range(n+1)]
+# from 0 to log2(n)+1
+nrroots_by_power = [0]*n.bit_length()
 
 for i in range(2,n+1):
-    nr +=1  # for i^i
-    for j in range(2,i):
-        if count_power(j,i):
-            nr += 1
-        if count_power(i,j):
-            nr += 1
-
     if powers[i][1] == 1:
         # powers
         j = i*i
@@ -64,9 +46,8 @@ for i in range(2,n+1):
             powers[j] = (i,power)
             j *= i
             power += 1
-        # primes
-        if is_prime[i]:
-            for j in range(i*i,n+1,i):
-                is_prime[j]=False
-
+        power -= 1
+        if nrroots_by_power[power] == 0:
+            nrroots_by_power[power] = count_powersofroot(power)
+        nr += nrroots_by_power[power]
 print(nr)
