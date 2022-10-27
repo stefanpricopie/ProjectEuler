@@ -17,4 +17,5 @@ for coin in coins:
         ways[i] += ways[i-coin]
 
 for n in ns:
-    print(ways[n]%(1e9+7))
+    # module must be integer
+    print(ways[n]%int(1e9+7))
