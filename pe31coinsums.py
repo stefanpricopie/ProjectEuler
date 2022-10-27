@@ -17,4 +17,4 @@ for coin in coins:
         ways[i] += ways[i-coin]
 
 for n in ns:
-    print(ways[n])
+    print(ways[n]%(1e9+7))
