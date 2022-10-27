@@ -1,3 +1,5 @@
+# https://www.hackerrank.com/contests/projecteuler/challenges/euler030/problem
+
 n = int(input())
 
 s = 0

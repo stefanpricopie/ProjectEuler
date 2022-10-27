@@ -1,3 +1,5 @@
+# https://www.hackerrank.com/contests/projecteuler/challenges/euler029/problem
+
 n = int(input())
 
 def coprimes(a_list):   # returns list such that there are no a,b with a%b == 0
