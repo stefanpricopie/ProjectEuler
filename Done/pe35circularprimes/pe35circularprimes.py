@@ -1,36 +1,42 @@
 # https://www.hackerrank.com/contests/projecteuler/challenges/euler035/problem?isFullScreen=true
 
 # Solution 1: Brute force solution - 80% timeout
+# Solution 2: Sieve of Eratosthenes - 100%
 
-def nr_rotations(nr):
+def rotations(nr):
     s = str(nr)
     return [int(s[i:] + s[:i]) for i in range(len(s))]
 
 
-def is_prime(nr):
-    if nr == 1:
-        return False
-    if nr == 2:
-        return True
-    if nr % 2 == 0:
-        return False
-    for i in range(3, int(nr**0.5) + 1, 2):
-        if nr % i == 0:
-            return False
-    return True
+def sieve_of_eratosthenes(nr):
+    prime = [True for _ in range(nr + 1)]
 
+    p = 2
+    while p * p <= nr:
 
-def is_circular_prime(nr):
-    return all([is_prime(r) for r in nr_rotations(nr)])
+        # If prime[p] is not changed, then it is a prime
+        if prime[p]:
+
+            # Update all multiples of p
+            for i in range(p * 2, nr + 1, p):
+                prime[i] = False
+        p += 1
+    prime[0] = False
+    prime[1] = False
+
+    # return prime vector
+    return prime
 
 
 if __name__ == '__main__':
     n = int(input())
 
+    check_prime = sieve_of_eratosthenes(int('9' * len(str(n))))
+
     sum_circular_primes = 0
 
-    for i in range(1, n):
-        if is_circular_prime(i):
-            sum_circular_primes += i
+    for ni in range(1, n):
+        if all([check_prime[r] for r in rotations(ni)]):
+            sum_circular_primes += ni
 
     print(sum_circular_primes)
