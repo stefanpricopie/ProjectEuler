@@ -1,6 +1,8 @@
 # https://www.hackerrank.com/contests/projecteuler/challenges/euler039/problem
 
 # Solution 1: Brute force solution (for max n) - 33% score (timeout)
+# Solution 2: Euclid's formula for a Pythagorean triple
+#             count primitive triplets only (a,b,c) - 50% score (timeout)
 
 import math
 
@@ -13,14 +15,26 @@ def main():
 
     count = [0] * (max_n + 1)
 
-    # assume a < b < c
-    for a in range(1, math.ceil(max_n/(2 + math.sqrt(2)))):
-        for b in range(a+1, math.ceil(max_n/2)):
-            c = math.sqrt(a**2 + b**2)
-            if c.is_integer():
-                p = a + b + int(c)
-                if p <= max_n:
-                    count[p] += 1
+    # Euclid's formula for a Pythagorean triple
+    # a = m^2 - n^2
+    # b = 2mn
+    # c = m^2 + n^2
+    # where m > n > 0 and m and n are coprime
+    for m in range(2, int(math.sqrt(max_n)) + 1):
+        for n in range(1, m):
+            if (m - n) % 2 == 0 or math.gcd(m, n) != 1:
+                # m and n are not coprime or m - n is even
+                # if m and n are odd, then a, b and c are even (non-primitive)
+                continue
+
+            a = m * m - n * n
+            b = 2 * m * n
+            c = m * m + n * n
+
+            p = a + b + c
+            while p <= max_n:
+                count[p] += 1
+                p += a + b + c
 
     for n in ns:
         max_triangles = max(count[:n+2])
