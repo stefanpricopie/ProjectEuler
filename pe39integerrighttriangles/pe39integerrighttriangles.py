@@ -3,6 +3,7 @@
 # Solution 1: Brute force solution (for max n) - 33% score (timeout)
 # Solution 2: Euclid's formula for a Pythagorean triple
 #             count primitive triplets only (a,b,c) - 50% score (timeout)
+# Solution 3: + store best p - 100% score
 
 import math
 
@@ -36,9 +37,16 @@ def main():
                 count[p] += 1
                 p += a + b + c
 
+    # store best p
+    best_p = [0] * (max_n + 1)
+    for p in range(1, max_n + 1):
+        if count[p] > count[best_p[p - 1]]:
+            best_p[p] = p
+        else:
+            best_p[p] = best_p[p - 1]
+
     for n in ns:
-        max_triangles = max(count[:n+2])
-        print(count.index(max_triangles))
+        print(best_p[n])
 
 
 if __name__ == '__main__':
